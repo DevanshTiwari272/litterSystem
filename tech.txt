@@ -1,0 +1,135 @@
+
+ENGINEERING REFERENCE
+APLMS Dashboard
+Full Technology Stack
+Every library, tool, and service — with rationale
+
+
+1. Stack at a Glance
+The APLMS dashboard is a React 18 single-page application built on Next.js 14 (App Router), styled with Tailwind CSS using shadcn/ui primitives, and powered by a FastAPI backend over REST + WebSocket. The full stack is containerised with Docker and orchestrated by Kubernetes.
+
+
+
+2. Frontend Core
+
+2.1 Framework — Next.js 14 (App Router)
+Next.js provides the application shell, routing, and build pipeline. The App Router is used for file-based page routing, layout nesting (sidebar + topbar persist across all dashboard pages), and server components where appropriate.
+
+
+2.2 Language — TypeScript 5
+Strict mode enabled — noImplicitAny, strictNullChecks, exactOptionalPropertyTypes
+Shared type definitions — types/ directory exports interfaces for Incident, Camera, Alert, User, Zone used across all components
+Zod schemas — runtime validation of all API responses — prevents type drift between backend and frontend
+Path aliases — @/components, @/hooks, @/lib, @/types configured in tsconfig.json
+
+2.3 Styling — Tailwind CSS + CSS Custom Properties
+Tailwind generates utility classes. The APLMS dark theme tokens are defined as CSS custom properties in globals.css and mapped to Tailwind config, so both className='text-[--text-primary]' and the design token system work in sync.
+
+
+
+3. UI Component Library
+
+3.1 shadcn/ui + Radix UI
+shadcn/ui components are copied into the project (not installed as a package), giving full control over styles. Every component is built on Radix UI primitives for correct accessibility behaviour out of the box.
+
+
+
+4. Data & State Management
+
+4.1 TanStack Query v5 — Server State
+TanStack Query manages all REST API calls. It provides caching, background refetching, loading/error states, and optimistic updates — eliminating manual useEffect data-fetching patterns throughout the app.
+
+
+4.2 Zustand — Client State
+Zustand manages client-side state that doesn't come from the server: auth session, live WebSocket event stream, sidebar collapsed state, notification queue, and UI preferences.
+
+
+4.3 Socket.IO Client — Real-Time Layer
+A singleton Socket.IO connection established on app mount. The WebSocket stream feeds the Zustand alert store, which propagates updates to all subscribed components without prop drilling.
+
+
+
+5. Data Visualisation
+
+5.1 Recharts — Charts
+
+
+All Recharts charts use CSS variable color values to stay in sync with the dark theme token system
+Custom tooltips styled as dark cards (#1A1D27 background, 1px border, 8px radius)
+Responsive containers wrap all charts — charts resize automatically on window resize
+Chart animations disabled for live-updating charts to prevent visual noise on data refresh
+
+5.2 Leaflet.js + react-leaflet — Maps
+
+
+
+6. Live Video Streaming
+
+6.1 HLS.js — Primary Stream Renderer
+Camera streams from the backend are transcoded to HLS (HTTP Live Streaming) format. HLS.js plays these in any modern browser without requiring plugins, and adapts quality based on network conditions.
+
+
+
+7. Forms & Validation
+
+7.1 React Hook Form + Zod
+
+
+
+8. Animation & Motion
+
+8.1 Framer Motion
+Framer Motion handles all complex animations. Simple hover/transition states are CSS-only for performance. Framer Motion is used only where declarative animation logic would be complex in CSS alone.
+
+
+
+9. Authentication & Security
+
+9.1 Auth Strategy
+
+
+
+10. Testing Strategy
+
+10.1 Test Stack
+
+
+Coverage target — 80% line coverage on utility functions and hooks; 60% on components
+CI gate — All unit + component tests must pass before merging a PR; E2E runs on staging deploy
+Mock Service Worker (MSW) — intercepts API calls in tests and the browser dev environment for realistic data without a running backend
+
+
+11. Build, Tooling & DX
+
+
+
+12. Deployment & Infrastructure
+
+12.1 Containerisation — Docker
+
+
+12.2 Orchestration — Kubernetes
+
+
+12.3 CI/CD — GitHub Actions
+
+
+
+13. Observability & Monitoring
+
+
+
+14. Complete package.json Dependencies
+Production and development dependencies with exact package names for copy-paste into package.json.
+
+14.1 Dependencies (Production)
+
+
+14.2 DevDependencies
+
+
+
+15. Architecture Decision Summary
+
+
+— End of Tech Stack Document —

@@ -1,0 +1,147 @@
+
+UI / UX DESIGN DOCUMENT
+APLMS Monitoring Dashboard
+Dark Theme • Visual Design Specification
+
+Based on the FlowMate reference design — adapted for the AI-Powered
+Public Litter Monitoring System (APLMS)
+
+
+1. Design Philosophy
+The APLMS dashboard adopts a dark, data-dense aesthetic inspired by the FlowMate reference design. The visual language is purpose-built for operators who live inside this interface for extended shifts — prioritizing clarity, information density, and fast visual triage over decorative embellishment.
+
+
+Low-Fatigue Dark Theme — deep navy backgrounds (#0F1117) reduce eye strain during extended use
+Signal Over Noise — color is used exclusively to communicate meaning — red = danger, amber = caution, green = safe, blue = informational
+Density with Breathing Room — information-dense layout with deliberate 12–24px whitespace between components to prevent cognitive overload
+Progressive Disclosure — only the most critical information is shown at a glance; details expand on demand via drawers and detail pages
+Consistent Spatial Rhythm — 8px base unit used throughout — all spacing, padding, and sizes are multiples of 8
+
+
+2. Color System
+Derived from the reference design's navy/slate palette. All semantic usage is strictly defined below — designers and engineers should never deviate from these token assignments.
+
+2.1 Background Layers
+The dashboard uses a three-level depth model. Each layer sits visually above the previous, creating hierarchy without borders.
+
+
+2.2 Accent & Semantic Colors
+These colors carry fixed semantic meanings. Never use red for success or green for danger.
+
+
+2.3 Text Colors
+
+
+
+
+3. Typography
+The type system uses two typefaces: a geometric sans-serif for UI chrome and a monospace for numeric data. This pairing gives the dashboard a precise, technical character without feeling sterile.
+
+
+Line height — 1.5 for body text, 1.2 for headings and numbers
+Letter spacing — -0.01em on headings for tighter, premium feel; 0 on body
+Never use font weights below 400 — thin fonts are illegible on dark backgrounds at small sizes
+
+
+4. Spacing & Layout Grid
+
+4.1 Base Unit
+All spacing values are multiples of 8px. This creates a consistent visual rhythm across the entire dashboard.
+
+
+4.2 Page Layout Structure
+The dashboard uses a fixed sidebar + scrollable content area layout. The sidebar never scrolls; the main content area scrolls vertically per page.
+
+
+4.3 Content Grid
+12-column CSS grid on desktop (1280px+), 8-column on tablet (768–1279px)
+Column gutter: 24px. Outer padding: 32px on desktop, 24px on tablet
+KPI cards: span 3 columns each (4 cards = full row) on desktop; 4 columns each on tablet
+Main content panels: span 8 columns; side panels span 4 columns
+
+
+5. Component Specifications
+Detailed visual specs for every major reusable component in the APLMS dashboard, derived from the reference design.
+
+5.1 Navigation Sidebar
+
+
+5.2 Top Bar
+
+
+5.3 KPI Metric Cards
+As seen in the reference image: large number hero, label below, percentage badge, and a colored progress bar at the bottom. Three cards side-by-side on the overview row.
+
+
+
+5.4 Live Activity Feed
+Equivalent to the 'Live Task Activity Feed' in the reference. For APLMS this becomes the real-time incident stream showing detection events as they occur.
+
+
+5.5 Side Panel — Focus / Detail Widgets
+The right-side panel in the reference shows 'Focus Session Tracking' with user cards. In APLMS this becomes the 'Active Officers' panel or 'Zone Status' widget.
+
+
+
+6. Iconography
+Icons use Lucide React throughout — a consistent, stroke-based icon set. Do not mix icon sets.
+
+Icon stroke width — 1.5px throughout (Lucide default). Do not use filled variants except for status dots
+Icon size — 16px in tables and compact rows, 18px in nav, 20–24px in card headers
+
+
+7. Interaction States & Motion
+
+7.1 State Definitions
+
+7.2 Animation Principles
+Duration scale — Quick: 100–150ms (micro interactions). Standard: 200–300ms (state changes). Deliberate: 400–600ms (page transitions, modals)
+Easing — ease-out for elements entering the screen. ease-in for elements leaving. ease for state transitions
+Live feed items — New rows slide in from the top (translateY(-16px) → 0) with opacity 0 → 1 over 300ms ease-out
+Alert toast — Slides in from bottom-right (translateX(16px)) over 300ms; auto-dismiss fades out over 200ms
+Progress bars — Fill animates from 0% to target width over 800ms ease-out on page load
+No animation for — Critical alert status changes — these should appear instantly to maximize response speed
+
+
+8. Badge & Status System
+Badges communicate status at a glance. All badges follow these exact specifications — never create custom one-off badge styles.
+
+
+Badge font size: 10px. Font weight: 600. Padding: 2px 6px. Letter-spacing: 0.04em (slightly expanded for legibility at small size).
+
+
+9. Form & Input Components
+
+
+
+10. Responsive Design
+
+
+
+11. APLMS-Specific Design Adaptations
+The reference FlowMate design is for a task-management product. The following table maps each FlowMate UI element to its APLMS equivalent and any visual changes required.
+
+
+
+12. Design-to-Dev Handoff Checklist
+Designers should verify all items below before handing off to engineering. Engineers should verify all items are implemented before marking a component complete.
+
+
+All color values use CSS custom properties (tokens), not hard-coded hex values
+All interactive states documented: default, hover, active, focus, disabled, loading, error
+Responsive layouts specified for all 4 breakpoints
+Badge text and status values documented and named consistently
+All icons referenced by Lucide icon name, not screenshots
+Spacing values use the 8px base unit — no arbitrary pixel values
+
+
+CSS custom properties defined in :root with all color tokens
+All animations use will-change: transform or opacity for GPU acceleration
+Focus states visible and meet WCAG 2.1 AA for keyboard navigation
+Color alone is never the sole indicator of status (icon or text always accompanies)
+All badges tested with long text to verify they truncate gracefully
+Dark mode is the only theme — no light mode toggle required for MVP
+Live feed updates tested at high frequency (>10 events/minute) without performance degradation
+Contrast ratios verified for all text/background combinations
+
+— End of Design Document —
